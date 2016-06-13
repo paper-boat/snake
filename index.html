@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>欢迎来到蛇的世界</title>
+</head>
+<style>
+  *{
+    padding:0;
+    margin:0;
+    list-style: none;
+  }
+  body{
+    width: 100%;
+    height:100%;
+  }
+  #jiemian{
+    /*position: relative;*/
+  }
+  #jiemian img{
+    /*width: 100%;*/
+    /*height:100%;*/
+    position: absolute;
+    margin: auto;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+  }
+  .daojishi{
+    position: absolute;
+    /*margin: auto;*/
+    top:100px;
+    /*bottom:0;*/
+    left:550px;
+    /*right:0;*/
+  }
+</style>
+<body>
+  <div id="jiemian">
+    <img src="./img\tcs1.png" alt="">
+    <div class="daojishi">
+      <h1><span id="countdown"></span></h1>
+    </div>
+  </div>
+  <script src="./jquery工程文件\jquery-1.12.0.js"></script>
+  <script>
+    $(function(){
+      var countdown=$("#countdown");
+     	var time=4;
+     	var flag;
+     	function daojishi(){
+     		time=time-1;
+     		countdown.innerHTML=time;
+     		if(time==0){
+     			location.href="html/贪吃蛇2.html";
+     			clearInterval(flag);
+     		}
+     	}
+     	flag=setInterval(daojishi,1000);
+    })
+  </script>
+</body>
+</html>

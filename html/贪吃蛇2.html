@@ -1,0 +1,359 @@
+<<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <style>
+  *{
+    margin: 0;
+    padding:0;
+    list-style: none;
+  }
+  body{
+    background: rgb(67, 187, 101);
+  }
+  .zhezhao{
+    width: 602px;
+    height:602px;
+    position: absolute;
+    margin: auto;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+    background:rgba(0, 0, 0, 0.3);
+    z-index: 5;
+  }
+  .setting{
+    width: 480px;
+    height:480px;
+    border-radius: 30px;
+    position: absolute;
+    margin: auto;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+    background:#A7E0F3;
+    z-index: 5;
+  }
+  #sence{
+    width: 600px;
+    height:600px;
+    border: 1px solid #52A500;
+    border-bottom:none;
+    border-right: none;
+    position: absolute;
+    margin: auto;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+    background: #0075A4;
+  }
+  .block{
+    width: 29px;
+    height:29px;
+    float: left;
+    text-align: center;
+    line-height: 29px;
+    /*border: 1px solid orange;*/
+    margin:0 1px 1px 0;
+    background: white;
+  }
+  .shiwu{
+    background-image: url(../img/shiwu.png);
+  }
+  .she{
+    background-image: url(../img/ss2.png);
+  }
+  .changjing{
+    width: 300px;
+    height:420px;
+    position: absolute;
+    top:60px;
+    right: 20px;
+  }
+  .changjing input{
+    margin-top: 10px;
+    width: 210px;
+    height:40px;
+    text-align: center;
+    line-height: 40px;
+    float: left;
+    border:none;
+    outline: none;
+    border-bottom:1px solid rgb(10, 73, 7);
+    background: none;
+    z-index: 111;
+  }
+  .changjing li{
+    margin: 15px 10px;
+  }
+  .cj{
+    width: 204px;
+    height:60px;
+    border-radius: 15px;
+    overflow: hidden;
+    position: relative;
+    line-height: 60px;
+    text-align: center;
+  }
+  .cj img{
+    width: 207px;
+    height: 67px;
+    border-radius: 8px;
+    position: absolute;
+    margin: auto;
+    bottom: 0;
+    top:0;
+    left:-2px;
+    right:0;
+  }
+  .cj span{
+    position: absolute;
+    margin: auto;
+    bottom: 0;
+    top:0;
+    left:0;
+    right:0;
+    z-index: 11;
+    font-size: 32px;
+  }
+  .controller ul .active{
+    background: orange;
+  }
+  .anniu{
+    top:60px;
+    width: 120px;
+    height:420px;
+    /*margin: 0 auto;*/
+    position: relative;
+    left:30px;
+  }
+  .anniu li{
+    display: inline-block;
+    float: left;
+    margin: 20px 10px;
+  }
+  .anniu-center{
+    width: 64px;
+    height: 65px;
+    border-radius: 50%;
+    overflow: hidden;
+    position: relative;;
+  }
+  .anniu-center img{
+    position: absolute;
+    margin: auto;
+    bottom: 0;
+    top:0;
+    left:-4px;
+    right:0;
+    width: 69px;
+    height:71px;
+    border-radius: 50%;
+  }
+
+  </style>
+</head>
+<body>
+
+  <div>
+    <div class="zhezhao">
+      <div class="setting">
+        <div class="controller">
+          <ul class="changjing">
+            <li data-row="15" class="cj">
+              <img src="../img/121.png" alt="">
+              <span>15*15</span>
+            </li>
+            <li data-row="20" class="active cj">
+              <img src="../img/121.png" alt="">
+              <span>20*20</span>
+            </li>
+            <li data-row="30" class="cj">
+              <img src="../img/121.png" alt="">
+              <span>30*30</span>
+            </li>
+            <li>
+              <input type="text" placeholder="请输入5-40的数字" id="hangxuanze">
+            </li>
+          </ul>
+          <ul class="anniu">
+            <li data-controll="kaishi" class="play anniu-center">
+              <img src="../img/play-1.png" alt=""></li>
+            <li data-controll="zanting" class="anniu-center">
+              <img src="../img/zanting-1.png" alt="">
+            </li>
+            <li data-controll="restart" class="anniu-center">
+              <img src="../img/restart-1.png" alt="">
+            </li>
+          </ul>
+
+        </div>
+      </div>
+    </div>
+    <div id="sence"></div>
+  </div>
+
+  <script src="../jquery工程文件/jquery-1.12.0.js"></script>
+  <script>
+    $(function(){
+      //全局变量
+      var hang;
+      var she = [{x:0,y:0},{x:0,y:1},{x:0,y:2}];
+      var shiwu;
+      var timeId;
+      var fangxiang = 39;
+
+      //公用函数
+      var zb2id = function(x,y){
+        return x+ '-' +y;
+      }
+      // 放食物
+      var fangshiwu =function(){
+        var _x = Math.floor(Math.random()*hang);
+        var _y = Math.floor(Math.random()*hang);
+        $('#'+zb2id(_x,_y)).addClass('shiwu');
+        return {x:_x,y:_y};
+      }
+
+
+      var huanchangjing = function(  ){
+        hang = hang || 20;
+        var sence = $('#sence');
+        sence.empty();
+        var wh = Math.floor(600/hang);
+        for( var i=0;i<hang;i++){
+          for( var j=0;j<hang;j++){
+            $('<div>')
+            .addClass('block')
+            .attr('id',zb2id(i,j))
+            .width(wh-1)
+            .height(wh-1)
+            .appendTo(sence);
+          }
+        }
+        sence.width(wh*hang).height(wh*hang);
+      }
+
+        var move = function(){
+          var jiutou = she[she.length-1];
+          if(fangxiang ===39){
+            var xintou = {x:jiutou.x,y:jiutou.y+1};
+          }else if(fangxiang===37){
+            var xintou = {x:jiutou.x,y:jiutou.y-1};
+          }else if(fangxiang===38){
+            var xintou = {x:jiutou.x-1,y:jiutou.y};
+          }else if(fangxiang===40){
+            var xintou = {x:jiutou.x+1,y:jiutou.y};
+          }
+          // 撞墙
+          if(xintou.x<0||xintou.x>hang-1||xintou.y<0||xintou.y>hang-1){
+            clearInterval(timeId);
+            return;
+            // 吃食物
+          }else if( xintou.x===shiwu.x && xintou.y===shiwu.y){
+            she.push(xintou);
+            $('#'+zb2id(xintou.x,xintou.y)).addClass('she');
+            $('.shiwu').removeClass('shiwu');
+            shiwu = fangshiwu();
+          }else{
+            //没有吃到
+            she.push(xintou)
+            $('#'+zb2id(xintou.x,xintou.y)).addClass('she');
+            var weiba = she.shift();
+            $('#'+zb2id(weiba.x,weiba.y)).removeClass('she');
+          }
+
+          // she.push(xintou)
+          // $('#'+zb2id(xintou.x,xintou.y)).addClass('she');
+          // var weiba = she.shift();
+          // $('#'+zb2id(weiba.x,weiba.y)).removeClass('she');
+
+        }
+
+      //主题逻辑
+      huanchangjing();
+      shiwu = fangshiwu();
+      she.forEach(function(v){
+        $('#'+zb2id(v.x,v.y)).addClass('she');
+      })
+        ////事件和操作界面
+
+        //键盘事件的处理
+        $(document).bind('keydown',function(e){
+          if(e.keyCode !== 37 && e.keyCode !== 38 && e.keyCode !== 39 && e.keyCode !==40){
+            return;
+          }else if(Math.abs(e.keyCode-fangxiang)===2){
+            return;
+          }
+          fangxiang = e.keyCode;
+        })
+
+        $(document).bind('keydown',function(e){
+          if( e.keyCode === 32 ){
+              $('.zhezhao').css({display:"block"});
+              clearInterval(timeId);
+            }
+        })
+
+        //开始暂停
+        $('ul li[data-controll]').bind('click',function(){
+          var str = $(this).attr('data-controll');
+          if( str==='kaishi'){
+            $('.zhezhao').css({display:"none"});
+            timeId = setInterval(move,500);
+          }else if( str==='zanting'){
+            clearInterval(timeId);
+          }else if (str==='restart') {
+            clearInterval(timeId);
+            $('.she').removeClass('she');
+            $('.shiwu').removeClass('shiwu');
+            // she.push(xintou)
+            // $('#'+zb2id(xintou.x,xintou.y)).addClass('she');
+            fangxiang = 40;
+            she = [{x:0,y:0},{x:0,y:1},{x:0,y:2}];
+            she.forEach(function(v){
+              $('#'+zb2id(v.x,v.y)).addClass('she');
+            })
+            shiwu = fangshiwu();
+          }
+        })
+
+      //点击选择行列
+      $('ul li[data-row]').bind('click',function(){
+        if(timeId){
+          return;
+        }
+        hang = Number($(this).attr('data-row'));
+        $('li.active').removeClass('active');
+        $(this).addClass('active')
+        huanchangjing();
+        shiwu = fangshiwu();
+        she.forEach(function(v){
+          $('#'+zb2id(v.x,v.y)).addClass('she');
+        })
+      })
+
+      /////自定义行列
+    $('#hangxuanze').bind('keydown',function(e){
+      if( e.keyCode == 13 ){
+        hang = $(this).val();
+        if(isNaN(Number(hang))){
+          alert('请输入数字');
+        }else if(hang<5||hang>40){
+          alert('请按要求输入数字');
+        }else{
+          $('li.active').removeClass('active');
+          huanchangjing();
+          $('li[data-row='+hang+']').addClass('active');
+        }
+        huanchangjing();
+      }
+    })
+    })
+  </script>
+</body>
+</html>
